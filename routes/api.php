@@ -10,7 +10,7 @@ Route::middleware([JWTMiddleware::class])->group(function () {
     Route::get('refresh-token', [AuthController::class, 'refreshToken'])->name('refresh');
     Route::get('user/{id}',[UserController::class,'show'])->name('user.show');
     Route::put('user/{id}', [UserController::class, 'update'])->name('user.update');
-    Route::delete('user/{id}', [AuthController::class, 'destroy'])->name('user.delete');
+    Route::delete('user/{id}', [UserController::class, 'destroy'])->name('user.delete');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('search', [UserController::class, 'search'])->name('search');
 });

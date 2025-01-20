@@ -3,25 +3,34 @@ namespace App\Services\Impl;
 use App\Models\User;
 use App\Http\Requests\UserPostRequest;
 use App\Services\UserService;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 class UserServiceImpl implements UserService {
    
     public function create(UserPostRequest $request){
-        $name = $request->name;
-        $email = $request->email;
-        $password = $request->password;
-        $user = User::create([
+        try {
+            $name = $request->name;
+            $email = $request->email;
+            $password = $request->password;
+            $user = User::create([
                 'name' => $name,
                 'email' => $email,
                 'password' => Hash::make($password),
             ]);
             return $user;
+        } catch (\Throwable $th) {
+            throw new HttpResponseException(response()->notFound('user not found'));
+        }
         }
     
         public function update(UserPostRequest $request, $id){
+           try {
             $user = User::findOrFail($id);
+            if (!$user) {
+                throw new HttpResponseException(response()->notFound('user not found'));
+            }
             $name = $request->name;
             $email = $request->email;
             $password = $request->password;
@@ -31,17 +40,29 @@ class UserServiceImpl implements UserService {
                 'password' => Hash::make($password),
             ]);
             return $user;
+           } catch (\Throwable $th) {
+                throw new HttpResponseException(response()->notFound('user not found'));
+           }
         }
     
         public function delete($id){
-            $user = User::findOrFail($id);
-            $user->delete();
-            return $user;
+            try {
+                $user = User::findOrFail($id);
+                $user->delete();
+                return $user;
+            } catch (\Throwable $th) {
+                throw new HttpResponseException(response()->notFound('user not found'));
+            }
         }
     
         public function show($id){
-            $user = User::findOrFail($id);
-            return $user;
+            try {
+                //code...
+                $user = User::findOrFail($id);
+                return $user;
+            } catch (\Throwable $th) {
+                throw new HttpResponseException(response()->notFound('user not found'));
+            }
         }
     
         public function index(){
