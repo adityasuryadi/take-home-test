@@ -14,22 +14,23 @@ class AuthController extends Controller
     {
         $this->authService = $authService;
     }
-/*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Logs in a user with the given credentials
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-/******  1ba71ef2-a954-45d2-962b-535bca0fa963  *******/
     public function login(Request $request){
         $result = $this->authService->login($request);
+
+        if (! $result) {
+            return response()->badRequest('invalid credentials');
+        }
 
         return response()->ok($result);
     }
 
     public function refreshToken(){
+        $result = $this->authService->refreshToken(request());
+        if (!$result) {
+            return response()->unaAuthorized('invalid credentials');
+        }
 
+        return response()->ok($result); 
     }
 
     public function logout(Request $request){

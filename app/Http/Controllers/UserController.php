@@ -24,32 +24,28 @@ class UserController extends Controller
       public function store(UserPostRequest $request)
       {
           $user = $this->userService->create($request);
-          return response()->json($user, 201);
+          return response()->ok($user);
       }
   
       // Show a specific user
       public function show($id)
       {
         $user = $this->userService->show($id);
-        return response()->json($user, 202);
+        return response()->ok($user);
       }
   
       // Update a user
       public function update(Request $request, $id)
       {
         $user = $this->userService->update($request,$id);
-        return response()->json($user, 201);
-  
-          return response()->json($user);
+        return response()->ok($user);
       }
   
       // Delete a user
       public function destroy($id)
       {
         $user = $this->userService->delete($id);
-        return response()->json($user, 201);
-  
-          return response()->json(['message' => 'User deleted successfully']);
+        return response()->ok([]);
       }
 
       public function search(Request $request){

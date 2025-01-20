@@ -24,11 +24,22 @@ class UserPostRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ];
+
+        if ($this->isMethod('post')) {
+            return [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'password_confirmation' => 'required|string|min:8|same:password',
+            ];
+        } elseif ($this->isMethod('put')) {
+            return [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users,email'. $this->user->id,
+                'password' => 'required|string|min:8',
+                'password_confirmation' => 'required|string|min:8|same:password',
+            ];
+        }
     }
 
     public function failedValidation(Validator $validator)
